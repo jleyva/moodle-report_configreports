@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */ 
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */ 
 
 // Based on Custom SQL Reports Plugin
 // See http://moodle.org/mod/data/view.php?d=13&rid=2884
@@ -37,48 +38,48 @@ class timeline_form extends moodleform {
 
         $mform =& $this->_form;
 
-		$options = array('previous'=>get_string('previousdays', 'block_configurable_reports'), 'fixeddate'=>get_string('fixeddate', 'block_configurable_reports'));
-		$mform->addElement('select', 'timemode', get_string('timemode', 'block_configurable_reports'),$options);
-		$mform->setDefault('timemode','previous');
-		
-		$mform->addElement('text', 'previousstart', get_string('previousstart', 'block_configurable_reports'));
-		$mform->setDefault('previousstart', 1);
-		$mform->setType('previousstart', PARAM_INT);
-		$mform->addRule('previousstart', null, 'numeric', null, 'client');
-		$mform->disabledIf('previousstart','timemode','eq','fixeddate');		
-		
-		$mform->addElement('text', 'previousend', get_string('previousend', 'block_configurable_reports'));
-		$mform->setDefault('previousend', 0);
-		$mform->setType('previousend', PARAM_INT);
-		$mform->addRule('previousend', null, 'numeric', null, 'client');
-		$mform->disabledIf('previousend','timemode','eq','fixeddate');
-		
-		$mform->addElement('checkbox', 'forcemidnight', get_string('forcemidnight', 'block_configurable_reports'));
-		$mform->disabledIf('forcemidnight','timemode','eq','fixeddate');
-		
-        $mform->addElement('date_time_selector', 'starttime', get_string('starttime', 'block_configurable_reports'));
-		$mform->setDefault('starttime', time() - 3600 * 48);
-        $mform->disabledIf('starttime','timemode','eq','previous');
-		
-		$mform->addElement('date_time_selector', 'endtime', get_string('endtime', 'block_configurable_reports'));
-		$mform->setDefault('endtime', time() + 3600 * 24);
-		$mform->disabledIf('endtime','timemode','eq','previous');
-		
-		$mform->addElement('text', 'interval', get_string('timeinterval', 'block_configurable_reports'));
-		$mform->setDefault('interval', 1);
-		$mform->setType('interval', PARAM_INT);
-		$mform->addRule('interval', null, 'numeric', null, 'client');
-		$mform->addRule('interval', null, 'nonzero', null, 'client');
-				
-		$mform->addElement('select', 'ordering', get_string('ordering', 'block_configurable_reports'),array('asc'=>'ASC','desc'=>'DESC'));
-				
+        $options = array('previous'=>get_string('previousdays', 'report_configreports'), 'fixeddate'=>get_string('fixeddate', 'report_configreports'));
+        $mform->addElement('select', 'timemode', get_string('timemode', 'report_configreports'),$options);
+        $mform->setDefault('timemode','previous');
+
+        $mform->addElement('text', 'previousstart', get_string('previousstart', 'report_configreports'));
+        $mform->setDefault('previousstart', 1);
+        $mform->setType('previousstart', PARAM_INT);
+        $mform->addRule('previousstart', null, 'numeric', null, 'client');
+        $mform->disabledif ('previousstart','timemode','eq','fixeddate');
+
+        $mform->addElement('text', 'previousend', get_string('previousend', 'report_configreports'));
+        $mform->setDefault('previousend', 0);
+        $mform->setType('previousend', PARAM_INT);
+        $mform->addRule('previousend', null, 'numeric', null, 'client');
+        $mform->disabledif ('previousend','timemode','eq','fixeddate');
+
+        $mform->addElement('checkbox', 'forcemidnight', get_string('forcemidnight', 'report_configreports'));
+        $mform->disabledif ('forcemidnight','timemode','eq','fixeddate');
+
+        $mform->addElement('date_time_selector', 'starttime', get_string('starttime', 'report_configreports'));
+        $mform->setDefault('starttime', time() - 3600 * 48);
+        $mform->disabledif ('starttime','timemode','eq','previous');
+
+        $mform->addElement('date_time_selector', 'endtime', get_string('endtime', 'report_configreports'));
+        $mform->setDefault('endtime', time() + 3600 * 24);
+        $mform->disabledif ('endtime','timemode','eq','previous');
+
+        $mform->addElement('text', 'interval', get_string('timeinterval', 'report_configreports'));
+        $mform->setDefault('interval', 1);
+        $mform->setType('interval', PARAM_INT);
+        $mform->addRule('interval', null, 'numeric', null, 'client');
+        $mform->addRule('interval', null, 'nonzero', null, 'client');
+        
+        $mform->addElement('select', 'ordering', get_string('ordering', 'report_configreports'),array('asc'=>'ASC','desc'=>'DESC'));
+        
         $this->add_action_buttons();
     }
 
     function validation($data, $files) {
         global $DB, $CFG, $db, $USER;
 
-        $errors = parent::validation($data, $files);		
+        $errors = parent::validation($data, $files);
 
         return $errors;
     }

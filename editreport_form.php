@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 // This file is part of Moodle - http://moodle.org/
 //
@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating Configurable Reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */ 
+ * A report plugin for creating Configurable Reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */ 
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -36,55 +37,55 @@ class report_edit_form extends moodleform {
 
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
-		$mform->addElement('text', 'name', get_string('name'));
-		if (!empty($CFG->formatstringstriptags)) {
+        $mform->addElement('text', 'name', get_string('name'));
+        if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
         } else {
             $mform->setType('name', PARAM_CLEAN);
         }
         $mform->addRule('name', null, 'required', null, 'client');
-		
-		$mform->addElement('htmleditor', 'summary', get_string('summary'));
-        $mform->setType('summary', PARAM_RAW);
-        	
-        $typeoptions = cr_get_report_plugins($this->_customdata['courseid']);
-		
-		$eloptions = array();
-		if(isset($this->_customdata['report']->id) && $this->_customdata['report']->id)
-			$eloptions = array('disabled'=>'disabled');
-		$mform->addElement('select', 'type', get_string("typeofreport",'block_configurable_reports'), $typeoptions,$eloptions);
-		$mform->addHelpButton('type','typeofreport', 'block_configurable_reports');
- 
-		for($i=0;$i<=100;$i++)
-			$pagoptions[$i] = $i;
-		$mform->addElement('select', 'pagination', get_string("pagination",'block_configurable_reports'), $pagoptions);
-		$mform->setDefault('pagination',0);
-		$mform->addHelpButton('pagination','pagination', 'block_configurable_reports');
-		
-		$mform->addElement('checkbox','jsordering',get_string('ordering','block_configurable_reports'),get_string('enablejsordering','block_configurable_reports'));
-		$mform->addHelpButton('jsordering','jsordering', 'block_configurable_reports');
-		
-		$mform->addElement('header', 'exportoptions', get_string('exportoptions', 'block_configurable_reports'));
-		$options = cr_get_export_plugins();
-		
-		foreach($options as $key=>$val){
-			$mform->addElement('checkbox','export_'.$key,null,$val);
-		}
 
-		if(isset($this->_customdata['report']->id) && $this->_customdata['report']->id)
-			$mform->addElement('hidden','id',$this->_customdata['report']->id);
-		$mform->addElement('hidden','courseid',$this->_customdata['courseid']);
-		
+        $mform->addElement('htmleditor', 'summary', get_string('summary'));
+        $mform->setType('summary', PARAM_RAW);
+    
+        $typeoptions = cr_get_report_plugins($this->_customdata['courseid']);
+
+        $eloptions = array();
+        if (isset($this->_customdata['report']->id) && $this->_customdata['report']->id)
+            $eloptions = array('disabled'=>'disabled');
+        $mform->addElement('select', 'type', get_string("typeofreport",'report_configreports'), $typeoptions,$eloptions);
+        $mform->addHelpButton('type','typeofreport', 'report_configreports');
+ 
+        for($i=0;$i<=100;$i++)
+            $pagoptions[$i] = $i;
+        $mform->addElement('select', 'pagination', get_string("pagination",'report_configreports'), $pagoptions);
+        $mform->setDefault('pagination',0);
+        $mform->addHelpButton('pagination','pagination', 'report_configreports');
+
+        $mform->addElement('checkbox','jsordering',get_string('ordering','report_configreports'),get_string('enablejsordering','report_configreports'));
+        $mform->addHelpButton('jsordering','jsordering', 'report_configreports');
+
+        $mform->addElement('header', 'exportoptions', get_string('exportoptions', 'report_configreports'));
+        $options = cr_get_export_plugins();
+
+        foreach ($options as $key=>$val) {
+            $mform->addElement('checkbox','export_'.$key,null,$val);
+        }
+
+        if (isset($this->_customdata['report']->id) && $this->_customdata['report']->id)
+            $mform->addElement('hidden','id',$this->_customdata['report']->id);
+        $mform->addElement('hidden','courseid',$this->_customdata['courseid']);
+
         // buttons
         $this->add_action_buttons(true, get_string('add'));
 
     }
-	
-	function validation($data, $files){
-		$errors = parent::validation($data, $files);
-				
-		return $errors;
-	}		
+    
+    function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+        
+        return $errors;
+    }
 
 }
 

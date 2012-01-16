@@ -16,55 +16,56 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-require_once($CFG->dirroot.'/blocks/configurable_reports/plugin.class.php');
+require_once($CFG->dirroot.'/report/configreports/plugin.class.php');
 
 class plugin_puserfield extends plugin_base{
-	
-	function init(){
-		$this->form = true;
-		$this->unique = true;
-		$this->fullname = get_string('puserfield','block_configurable_reports');
-		$this->reporttypes = array('courses','sql','users','timeline','categories');
-	}
-	
-	function summary($data){
-		global $DB;
-		
-		if(strpos($data->field,'profile_') === 0){
-			$name = $DB->get_field('user_info_field','name',array('shortname' => str_replace('profile_','', $data->field)));
-			return $name .' = '.$data->value;
-		}	
-		return $data->field.' = '.$data->value;
-	}
-	
-	function execute($userid, $context, $data){
-		global $DB, $CFG;
-		
-		if(!$user = $DB->get_record('user',array('id' => $userid)))
-			return false;
-		
-		if(strpos($data->field,'profile_') === 0){			
-			if($profiledata = get_records_sql("SELECT d.*, f.shortname, f.datatype FROM {user_info_data} d ,{user_info_field} f 
-							WHERE f.id = d.fieldid AND d.userid = ?", array($userid))){
-				foreach($profiledata as $p){					
-					$user->{'profile_'.$p->shortname} = $p->data;
-				}
-			}
-		}
-		
-		if(isset($user->{$data->field}) && $user->{$data->field} == $data->value)
-			return true;
-		
-		return false;
-		
-	}
-	
+    
+    function init() {
+        $this->form = true;
+        $this->unique = true;
+        $this->fullname = get_string('puserfield','report_configreports');
+        $this->reporttypes = array('courses','sql','users','timeline','categories');
+    }
+    
+    function summary($data) {
+        global $DB;
+
+        if (strpos($data->field,'profile_') === 0) {
+            $name = $DB->get_field('user_info_field','name',array('shortname' => str_replace('profile_','', $data->field)));
+            return $name .' = '.$data->value;
+        }    
+        return $data->field.' = '.$data->value;
+    }
+    
+    function execute($userid, $context, $data) {
+        global $DB, $CFG;
+
+        if (!$user = $DB->get_record('user',array('id' => $userid)))
+            return false;
+
+        if (strpos($data->field,'profile_') === 0) {    
+            if ($profiledata = get_records_sql("SELECT d.*, f.shortname, f.datatype FROM {user_info_data} d ,{user_info_field} f 
+                            WHERE f.id = d.fieldid AND d.userid = ?", array($userid))) {
+                foreach ($profiledata as $p) {            
+                    $user->{'profile_'.$p->shortname} = $p->data;
+                }
+            }
+        }
+
+        if (isset($user->{$data->field}) && $user->{$data->field} == $data->value)
+            return true;
+
+        return false;
+
+    }
+    
 }
 
 ?>

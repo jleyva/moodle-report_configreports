@@ -16,45 +16,46 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-require_once($CFG->dirroot.'/blocks/configurable_reports/plugin.class.php');
+require_once($CFG->dirroot.'/report/configreports/plugin.class.php');
 
 class plugin_roleincourse extends plugin_base{
-	
-	function init(){
-		$this->form = true;
-		$this->unique = false;
-		$this->fullname = get_string('roleincourse','block_configurable_reports');
-		$this->reporttypes = array('courses','sql','users','timeline','categories');
-	}
-	
-	function summary($data){
-		global $DB;
-		
-		$rolename = $DB->get_field('role','name',array('id' => $data->roleid));
-		$coursename = $DB->get_field('course','fullname',array('id' => $this->report->courseid));
-		return $rolename.' '.$coursename;
-	}
-	
-	function execute($userid, $context, $data){
-		global $DB, $CFG;
-		
-		$context = ($this->report->courseid == SITEID)? get_context_instance(CONTEXT_SYSTEM): get_context_instance(CONTEXT_COURSE,$this->report->courseid);
-		$roles = get_user_roles($context,$userid);
-		if(!empty($roles)){
-			foreach($roles as $rol){
-				if($rol->roleid == $data->roleid)
-					return true;
-			}
-		}
-		return false;
-	}
-	
+    
+    function init() {
+        $this->form = true;
+        $this->unique = false;
+        $this->fullname = get_string('roleincourse','report_configreports');
+        $this->reporttypes = array('courses','sql','users','timeline','categories');
+    }
+    
+    function summary($data) {
+        global $DB;
+
+        $rolename = $DB->get_field('role','name',array('id' => $data->roleid));
+        $coursename = $DB->get_field('course','fullname',array('id' => $this->report->courseid));
+        return $rolename.' '.$coursename;
+    }
+    
+    function execute($userid, $context, $data) {
+        global $DB, $CFG;
+
+        $context = ($this->report->courseid == SITEID)? get_context_instance(CONTEXT_SYSTEM): get_context_instance(CONTEXT_COURSE,$this->report->courseid);
+        $roles = get_user_roles($context,$userid);
+        if (!empty($roles)) {
+            foreach ($roles as $rol) {
+                if ($rol->roleid == $data->roleid)
+                    return true;
+            }
+        }
+        return false;
+    }
+    
 }
 
 ?>

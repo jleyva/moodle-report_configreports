@@ -12,12 +12,12 @@ class report_edit_form extends moodleform {
 
         $mform =& $this->_form;
 
-        $mform->addElement('header', 'general', get_string('filter', 'block_configurable_reports'));
+        $mform->addElement('header', 'general', get_string('filter', 'report_configreports'));
 
-		$this->_customdata->add_filter_elements($mform);
-		
-		
-		$mform->addElement('hidden', 'id', $this->_customdata->config->id);
+        $this->_customdata->add_filter_elements($mform);
+
+
+        $mform->addElement('hidden', 'id', $this->_customdata->config->id);
         // buttons
         $this->add_action_buttons(true, get_string('add'));
 

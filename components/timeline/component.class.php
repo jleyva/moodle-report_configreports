@@ -16,40 +16,41 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 class component_timeline extends component_base{
-	
-	function init(){
-		$this->plugins = false;
-		$this->ordering = false;
-		$this->form = true;
-		$this->help = true;
-	}
-	
-	function form_process_data(&$cform){
-		global $DB;
-		if($this->form){
-			$data = $cform->get_data();
-			$components = cr_unserialize($this->config->components);
-			$components['timeline']['config'] = $data;
-			$this->config->components = cr_serialize($components);
-			$DB->update_record('block_configurable_reports_report',$this->config);
-		}
-	}
-	
-	function form_set_data(&$cform){
-		if($this->form){
-			$fdata = new stdclass;
-			$components = cr_unserialize($this->config->components);			
-			$compconfig = (isset($components['timeline']['config']))? $components['timeline']['config'] : new stdclass;		
-			$cform->set_data($compconfig);
-		}
-	}
+    
+    function init() {
+        $this->plugins = false;
+        $this->ordering = false;
+        $this->form = true;
+        $this->help = true;
+    }
+    
+    function form_process_data(&$cform) {
+        global $DB;
+        if ($this->form) {
+            $data = $cform->get_data();
+            $components = cr_unserialize($this->config->components);
+            $components['timeline']['config'] = $data;
+            $this->config->components = cr_serialize($components);
+            $DB->update_record('report_configreports',$this->config);
+        }
+    }
+    
+    function form_set_data(&$cform) {
+        if ($this->form) {
+            $fdata = new stdclass;
+            $components = cr_unserialize($this->config->components);    
+            $compconfig = (isset($components['timeline']['config']))? $components['timeline']['config'] : new stdclass;
+            $cform->set_data($compconfig);
+        }
+    }
 }
 
 ?>

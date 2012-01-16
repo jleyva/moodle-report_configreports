@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */  
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */  
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -34,16 +35,16 @@ class roleincourse_form extends moodleform {
 
         $mform =& $this->_form;
 
-        $mform->addElement('header', '', get_string('roleincourse','block_configurable_reports'), '');
-	
-		$roles = $DB->get_records('role');
-		
-		$userroles = array();
-		foreach($roles as $r)
-			$userroles[$r->id] = $r->name;
-			
+        $mform->addElement('header', '', get_string('roleincourse','report_configreports'), '');
+    
+        $roles = $DB->get_records('role');
+
+        $userroles = array();
+        foreach ($roles as $r)
+            $userroles[$r->id] = $r->name;
+    
         $mform->addElement('select', 'roleid', get_string('roles'), $userroles);
-		
+
        
         // buttons
         $this->add_action_buttons(true, get_string('add'));

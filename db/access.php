@@ -2,7 +2,7 @@
 
 $capabilities = array(
 
-    'block/configurable_reports:managereports' => array(
+    'report/configreports:managereports' => array(
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
@@ -11,16 +11,16 @@ $capabilities = array(
         )
     ),
 
-    'block/configurable_reports:managesqlreports' => array(
+    'report/configreports:managesqlreports' => array(
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
         'legacy' => array(
             'admin' => CAP_ALLOW
         )
-    ),	
-	
-    'block/configurable_reports:manageownreports' => array(
+    ),    
+    
+    'report/configreports:manageownreports' => array(
 
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
@@ -29,7 +29,7 @@ $capabilities = array(
         )
     ),
 
-    'block/configurable_reports:viewreports' => array(
+    'report/configreports:viewreports' => array(
 
         'captype' => 'read',
         'contextlevel' => CONTEXT_BLOCK,

@@ -16,34 +16,35 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-require_once($CFG->dirroot.'/blocks/configurable_reports/plugin.class.php');
+require_once($CFG->dirroot.'/report/configreports/plugin.class.php');
 
 class plugin_reportscapabilities extends plugin_base{
-	
-	function init(){
-		$this->form = false;
-		$this->unique = true;
-		$this->fullname = get_string('reportscapabilities','block_configurable_reports');
-		$this->reporttypes = array('courses','sql','users','timeline','categories');
-	}
-	
-	function summary($data){
-		return get_string('reportscapabilities_summary','block_configurable_reports');
-	}
-	
-	function execute($userid, $context, $data){
-		global $DB, $CFG;
-		
-		return has_capability('moodle/site:viewreports',get_context_instance(CONTEXT_SYSTEM),$userid);
-		
-	}
-	
+    
+    function init() {
+        $this->form = false;
+        $this->unique = true;
+        $this->fullname = get_string('reportscapabilities','report_configreports');
+        $this->reporttypes = array('courses','sql','users','timeline','categories');
+    }
+    
+    function summary($data) {
+        return get_string('reportscapabilities_summary','report_configreports');
+    }
+    
+    function execute($userid, $context, $data) {
+        global $DB, $CFG;
+
+        return has_capability('moodle/site:viewreports',get_context_instance(CONTEXT_SYSTEM),$userid);
+
+    }
+    
 }
 
 ?>

@@ -16,20 +16,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
   
-  function export_report($report){
-	global $DB, $CFG;
+  function export_report($report) {
+    global $DB, $CFG;
     require_once($CFG->dirroot.'/lib/excellib.class.php');
 
     $table = $report->table;
-	$matrix = array();
-	$filename = 'report_'.(time()).'.xls';
-	
+    $matrix = array();
+    $filename = 'report_'.(time()).'.xls';
+    
     if (!empty($table->head)) {
         $countcols = count($table->head);
         $keys=array_keys($table->head);
@@ -55,8 +56,8 @@
     /// Adding the worksheet
     $myxls =& $workbook->add_worksheet($filename);     
     
-    foreach($matrix as $ri=>$col){
-        foreach($col as $ci=>$cv){
+    foreach ($matrix as $ri=>$col) {
+        foreach ($col as $ci=>$cv) {
             $myxls->write_string($ri,$ci,$cv);
         }
     }

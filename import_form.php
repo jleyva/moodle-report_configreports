@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating Configurable Reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+  * A report plugin for creating Configurable Reports
+  * @package report
+ * @subpackage configreports
+  * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -33,25 +34,25 @@ class import_form extends moodleform {
         global $DB, $USER, $CFG;
 
         $mform =& $this->_form;
-		
-        $mform->addElement('header', 'importreport', get_string('importreport', 'block_configurable_reports'));
 
-		$mform->addElement('filepicker', 'userfile', get_string('file'));
-		$mform->setType('userfile', PARAM_FILE);
-		$mform->addRule('userfile', null, 'required');
-		
-		$mform->addElement('hidden','courseid',$this->_customdata);
-		
+        $mform->addElement('header', 'importreport', get_string('importreport', 'report_configreports'));
+
+        $mform->addElement('filepicker', 'userfile', get_string('file'));
+        $mform->setType('userfile', PARAM_FILE);
+        $mform->addRule('userfile', null, 'required');
+
+        $mform->addElement('hidden','courseid',$this->_customdata);
+
         // buttons
-        $this->add_action_buttons(false, get_string('importreport', 'block_configurable_reports'));
+        $this->add_action_buttons(false, get_string('importreport', 'report_configreports'));
 
     }
-	
-	function validation($data, $files){
-		$errors = parent::validation($data, $files);
-				
-		return $errors;
-	}		
+    
+    function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+        
+        return $errors;
+    }
 
 }
 
