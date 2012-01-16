@@ -16,39 +16,40 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-require_once($CFG->dirroot.'/blocks/configurable_reports/plugin.class.php');
+require_once($CFG->dirroot.'/report/configreports/plugin.class.php');
 
 class plugin_usersincurrentcourse extends plugin_base{
-	
-	function init(){
-		$this->fullname = get_string('usersincurrentcourse','block_configurable_reports');
-		$this->reporttypes = array('users');
-		$this->form = true;
-	}
-		
-	function summary($data){
-		return get_string('usersincurrentcourse_summary','block_configurable_reports');
-		
-	}
-	
-	// data -> Plugin configuration data
-	function execute($data,$user,$courseid){
-		global $DB;
-	
-		$context = get_context_instance(CONTEXT_COURSE,$courseid);
-		if($users = get_role_users($data->roles, $context, false, 'u.id')){
-			return array_keys($users);
-		}
-		
-		return array();
-	}
-	
+    
+    function init() {
+        $this->fullname = get_string('usersincurrentcourse','report_configreports');
+        $this->reporttypes = array('users');
+        $this->form = true;
+    }
+
+    function summary($data) {
+        return get_string('usersincurrentcourse_summary','report_configreports');
+
+    }
+    
+    // data -> Plugin configuration data
+    function execute($data,$user,$courseid) {
+        global $DB;
+    
+        $context = get_context_instance(CONTEXT_COURSE,$courseid);
+        if ($users = get_role_users($data->roles, $context, false, 'u.id')) {
+            return array_keys($users);
+        }
+
+        return array();
+    }
+    
 }
 
 ?>

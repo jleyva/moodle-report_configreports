@@ -16,33 +16,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */ 
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */ 
 
-require_once($CFG->dirroot.'/blocks/configurable_reports/plugin.class.php');
+require_once($CFG->dirroot.'/report/configreports/plugin.class.php');
 
 class plugin_currentuser extends plugin_base{
-	
-	function init(){
-		$this->fullname = get_string('currentuser','block_configurable_reports');
-		$this->reporttypes = array('users');
-		$this->form = false;
-	}
-		
-	function summary($data){
-		return get_string('currentuser_summary','block_configurable_reports');
-		
-	}
-	
-	// data -> Plugin configuration data
-	function execute($data,$user,$courseid){
-		global $DB;
-		return array($user->id);
-	}
-	
+    
+    function init() {
+        $this->fullname = get_string('currentuser','report_configreports');
+        $this->reporttypes = array('users');
+        $this->form = false;
+    }
+
+    function summary($data) {
+        return get_string('currentuser_summary','report_configreports');
+
+    }
+    
+    // data -> Plugin configuration data
+    function execute($data,$user,$courseid) {
+        global $DB;
+        return array($user->id);
+    }
+    
 }
 
 ?>

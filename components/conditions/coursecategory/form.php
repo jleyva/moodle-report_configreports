@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */  
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */  
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -34,13 +35,13 @@ class coursecategory_form extends moodleform {
 
         $mform =& $this->_form;
 
-        $mform->addElement('header', '', get_string('coursefield','block_configurable_reports'), '');
+        $mform->addElement('header', '', get_string('coursefield','report_configreports'), '');
 
-		$options = array(get_string('top'));
+        $options = array(get_string('top'));
         $parents = array();
-		make_categories_list($options, $parents);
-		$mform->addElement('select', 'categoryid', get_string('category'), $options);
-				
+        make_categories_list($options, $parents);
+        $mform->addElement('select', 'categoryid', get_string('category'), $options);
+        
         // buttons
         $this->add_action_buttons(true, get_string('add'));
 

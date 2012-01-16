@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */  
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */  
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -34,46 +35,46 @@ class columns_form extends moodleform {
 
         $mform =& $this->_form;
 
-		$mform->addElement('header', '', get_string('reporttable','block_configurable_reports'), '');
-		
-		$mform->addElement('text', 'tablewidth', get_string('tablewidth','block_configurable_reports'));
+        $mform->addElement('header', '', get_string('reporttable','report_configreports'), '');
+
+        $mform->addElement('text', 'tablewidth', get_string('tablewidth','report_configreports'));
         $mform->setType('tablewidth', PARAM_CLEAN);
-		$mform->setDefault('tablewidth', '100%');
-		$mform->addHelpButton('tablewidth','reporttable', 'block_configurable_reports');
-		
-		$options = array('center'=>'center','left'=>'left','right'=>'right');
-		
-		$mform->addElement('SELECT', 'tablealign', get_string('tablealign','block_configurable_reports'), $options);
+        $mform->setDefault('tablewidth', '100%');
+        $mform->addHelpButton('tablewidth','reporttable', 'report_configreports');
+
+        $options = array('center'=>'center','left'=>'left','right'=>'right');
+
+        $mform->addElement('SELECT', 'tablealign', get_string('tablealign','report_configreports'), $options);
         $mform->setType('tablealign', PARAM_CLEAN);
-		$mform->setDefault('tablealign', 'center');
-	   
-	    $mform->addElement('text', 'cellspacing', get_string('tablecellspacing','block_configurable_reports'));
+        $mform->setDefault('tablealign', 'center');
+       
+        $mform->addElement('text', 'cellspacing', get_string('tablecellspacing','report_configreports'));
         $mform->setType('cellspacing', PARAM_INT);
-		$mform->setDefault('cellspacing', '3');
-		$mform->setAdvanced('cellspacing');
-		
-		$mform->addElement('text', 'cellpadding', get_string('tablecellpadding','block_configurable_reports'));
+        $mform->setDefault('cellspacing', '3');
+        $mform->setAdvanced('cellspacing');
+
+        $mform->addElement('text', 'cellpadding', get_string('tablecellpadding','report_configreports'));
         $mform->setType('cellpadding', PARAM_INT);
-		$mform->setDefault('cellpadding', '3');
-		$mform->setAdvanced('cellpadding');
-				
-		$mform->addElement('text', 'class', get_string('tableclass','block_configurable_reports'));
+        $mform->setDefault('cellpadding', '3');
+        $mform->setAdvanced('cellpadding');
+        
+        $mform->addElement('text', 'class', get_string('tableclass','report_configreports'));
         $mform->setType('class', PARAM_CLEAN);
-		$mform->setAdvanced('class');
-	   
+        $mform->setAdvanced('class');
+       
         // buttons
         $this->add_action_buttons(true, get_string('update'));
 
     }
 
-	function validation($data, $files){
-		$errors = parent::validation($data, $files);
-		
-		if(!preg_match("/^\d+%?$/i",trim($data['tablewidth'])))
-			$errors['tablewidth'] = get_string('badtablewidth','block_configurable_reports');
-		
-		return $errors;
-	}	
+    function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+
+        if (!preg_match("/^\d+%?$/i",trim($data['tablewidth'])))
+            $errors['tablewidth'] = get_string('badtablewidth','report_configreports');
+
+        return $errors;
+    }    
 }
 
 ?>

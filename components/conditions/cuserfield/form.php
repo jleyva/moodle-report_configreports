@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */  
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */  
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -29,62 +30,62 @@ if (!defined('MOODLE_INTERNAL')) {
 require_once($CFG->libdir.'/formslib.php');
 
 class cuserfield_form extends moodleform {
-	var $allowedops =  array('='=>'=','>'=>'>','<'=>'<','>='=>'>=','<='=>'<=','<>'=>'<>','LIKE'=>'LIKE','NOT LIKE'=>'NOT LIKE','LIKE % %'=>'LIKE % %');
+    var $allowedops =  array('='=>'=','>'=>'>','<'=>'<','>='=>'>=','<='=>'<=','<>'=>'<>','LIKE'=>'LIKE','NOT LIKE'=>'NOT LIKE','LIKE % %'=>'LIKE % %');
 
     function definition() {
         global $DB, $USER, $CFG;
 
         $mform =& $this->_form;
 
-        $mform->addElement('header', '', get_string('coursefield','block_configurable_reports'), '');
+        $mform->addElement('header', '', get_string('coursefield','report_configreports'), '');
 
-		$columns = $DB->get_columns('user');
-		
-		$usercolumns = array();
-		foreach($columns as $c)
-			$usercolumns[$c->name] = $c->name;
-			
-		if($profile = $DB->get_records('user_info_field'))
-			foreach($profile as $p)
-				$usercolumns['profile_'.$p->shortname] = $p->name;	
-			
-        $mform->addElement('select', 'field', get_string('column','block_configurable_reports'), $usercolumns);
-		
-		$mform->addElement('select', 'operator', get_string('operator','block_configurable_reports'), $this->allowedops);
-		$mform->addElement('text','value',get_string('value','block_configurable_reports'));		
-		
+        $columns = $DB->get_columns('user');
+
+        $usercolumns = array();
+        foreach ($columns as $c)
+            $usercolumns[$c->name] = $c->name;
+    
+        if ($profile = $DB->get_records('user_info_field'))
+            foreach ($profile as $p)
+                $usercolumns['profile_'.$p->shortname] = $p->name;    
+    
+        $mform->addElement('select', 'field', get_string('column','report_configreports'), $usercolumns);
+
+        $mform->addElement('select', 'operator', get_string('operator','report_configreports'), $this->allowedops);
+        $mform->addElement('text','value',get_string('value','report_configreports'));
+
         // buttons
         $this->add_action_buttons(true, get_string('add'));
 
     }
-	
-	function validation($data,$files){
-		global $DB, $db, $CFG;
-		
-		$errors = parent::validation($data, $files);
-		
-		if(!in_array($data['operator'],$this->allowedops)){
-			$errors['operator'] = get_string('error_operator','block_configurable_reports');
-		}
-	
-		$columns = $DB->get_columns('user');	
-		$usercolumns = array();
-		foreach($columns as $c)
-			$usercolumns[$c->name] = $c->name;
-		if($profile = $DB->get_records('user_info_field'))
-			foreach($profile as $p)
-				$usercolumns['profile_'.$p->shortname] = 'profile_'.$p->shortname;	
-			
-		if(!in_array($data['field'],$usercolumns)){
-			$errors['field'] = get_string('error_field','block_configurable_reports');
-		}
-		
-		if(!is_numeric($data['value']) && preg_match('/^(<|>)[^(<|>)]/i',$data['operator'])){
-			$errors['value'] = get_string('error_value_expected_integer','block_configurable_reports');
-		}
-		
-		return $errors;
-	}
+    
+    function validation($data,$files) {
+        global $DB, $db, $CFG;
+
+        $errors = parent::validation($data, $files);
+
+        if (!in_array($data['operator'],$this->allowedops)) {
+            $errors['operator'] = get_string('error_operator','report_configreports');
+        }
+    
+        $columns = $DB->get_columns('user');    
+        $usercolumns = array();
+        foreach ($columns as $c)
+            $usercolumns[$c->name] = $c->name;
+        if ($profile = $DB->get_records('user_info_field'))
+            foreach ($profile as $p)
+                $usercolumns['profile_'.$p->shortname] = 'profile_'.$p->shortname;    
+    
+        if (!in_array($data['field'],$usercolumns)) {
+            $errors['field'] = get_string('error_field','report_configreports');
+        }
+
+        if (!is_numeric($data['value']) && preg_match('/^(<|>)[^(<|>)]/i',$data['operator'])) {
+            $errors['value'] = get_string('error_value_expected_integer','report_configreports');
+        }
+
+        return $errors;
+    }
 
 }
 

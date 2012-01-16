@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */ 
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */ 
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -33,18 +34,18 @@ class categoryfieldorder_form extends moodleform {
         global $DB, $USER, $CFG;
 
         $mform =& $this->_form;
-				
-		$columns = $DB->get_columns('course_categories');
-		
-		$categorycolumns = array();
-		foreach($columns as $c)
-			$categorycolumns[$c->name] = $c->name;
-			
-        $mform->addElement('select', 'column', get_string('column','block_configurable_reports'), $categorycolumns);
-		
-		$directions = array('asc'=>'ASC', 'desc'=>'DESC');
-		$mform->addElement('select', 'direction', get_string('direction','block_configurable_reports'), $directions);
-				
+        
+        $columns = $DB->get_columns('course_categories');
+
+        $categorycolumns = array();
+        foreach ($columns as $c)
+            $categorycolumns[$c->name] = $c->name;
+    
+        $mform->addElement('select', 'column', get_string('column','report_configreports'), $categorycolumns);
+
+        $directions = array('asc'=>'ASC', 'desc'=>'DESC');
+        $mform->addElement('select', 'direction', get_string('direction','report_configreports'), $directions);
+        
         // buttons
         $this->add_action_buttons(true, get_string('add'));
 

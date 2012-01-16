@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */ 
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */ 
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -34,25 +35,25 @@ class fuserfield_form extends moodleform {
 
         $mform =& $this->_form;
 
-        $mform->addElement('header', '', get_string('fuserfield','block_configurable_reports'), '');
+        $mform->addElement('header', '', get_string('fuserfield','report_configreports'), '');
 
-		$this->_customdata['compclass']->add_form_elements($mform,$this); 
-		
-		$columns = $DB->get_columns('user');
-		
-		$usercolumns = array();
-		foreach($columns as $c)
-			$usercolumns[$c->name] = $c->name;
-			
-		if($profile = $DB->get_records('user_info_field'))
-			foreach($profile as $p)
-				$usercolumns['profile_'.$p->shortname] = $p->name;	
-			
-		unset($usercolumns['password']);
-		unset($usercolumns['sesskey']);
-			
-        $mform->addElement('select', 'field', get_string('field','block_configurable_reports'), $usercolumns);
-		
+        $this->_customdata['compclass']->add_form_elements($mform,$this); 
+
+        $columns = $DB->get_columns('user');
+
+        $usercolumns = array();
+        foreach ($columns as $c)
+            $usercolumns[$c->name] = $c->name;
+    
+        if ($profile = $DB->get_records('user_info_field'))
+            foreach ($profile as $p)
+                $usercolumns['profile_'.$p->shortname] = $p->name;    
+    
+        unset($usercolumns['password']);
+        unset($usercolumns['sesskey']);
+    
+        $mform->addElement('select', 'field', get_string('field','report_configreports'), $usercolumns);
+
        
         // buttons
         $this->add_action_buttons(true, get_string('add'));

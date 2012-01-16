@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */  
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */  
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -31,19 +32,19 @@ require_once($CFG->libdir.'/formslib.php');
 class parentcategory_form extends moodleform {
     function definition() {
         global $DB, $USER, $CFG;
-		require_once($CFG->dirroot.'/course/lib.php');
-		
+        require_once($CFG->dirroot.'/course/lib.php');
+
         $mform =& $this->_form;
 
-        $mform->addElement('header', '', get_string('coursefield','block_configurable_reports'), '');
+        $mform->addElement('header', '', get_string('coursefield','report_configreports'), '');
 
-		$options = array(get_string('top'));
+        $options = array(get_string('top'));
         $parents = array();
-		make_categories_list($options, $parents);
-		$mform->addElement('select', 'categoryid', get_string('category'), $options);
-		
-		$mform->addElement('checkbox', 'includesubcats', get_string('includesubcats','block_configurable_reports'));
-				
+        make_categories_list($options, $parents);
+        $mform->addElement('select', 'categoryid', get_string('category'), $options);
+
+        $mform->addElement('checkbox', 'includesubcats', get_string('includesubcats','report_configreports'));
+        
         // buttons
         $this->add_action_buttons(true, get_string('add'));
 

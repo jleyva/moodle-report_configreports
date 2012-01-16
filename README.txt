@@ -1,24 +1,9 @@
-Configurable Reports Block
+Configurable Reports plugin
 
 Installation, Documentation, Tutorials....
-See http://docs.moodle.org/en/blocks/configurable_reports/
-Also http://moodle.org/mod/data/view.php?d=13&rid=4283
+See http://docs.moodle.org/en/report/configreports/
 
-Author: Juan Leyva 
-<http://moodle.org/user/profile.php?id=49568>
-<http://twitter.com/jleyvadelgado>
-<http://sites.google.com/site/mooconsole/>
-<http://moodle-es.blogspot.com>
-<http://openlearningtech.blogspot.com>
+This plugin requires Moodle 2.2 and onwards
 
-Thanks to:
-Ivan Breziansky for translating the block to slovak language
-Iñaki Arenaza for translating the block documentation to spanish
-Luis de Vasconcelos for testing the block
-Adam Olley and Netspot Moodle Partner for improving some parts of the Moodle2 version
-
-Some parts of this plugin uses code of:
-
-Admin Report: Custom SQL queries
-http://moodle.org/mod/data/view.php?d=13&rid=2884
-By Tim Hunt
+For previous versions of Moodle, check the Configurable Reports block
+http://moodle.org/plugins/view.php?plugin=block_configurable_reports

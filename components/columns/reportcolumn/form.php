@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating Configurable Reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */  
+ * A report plugin for creating Configurable Reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */  
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -33,51 +34,51 @@ class reportcolumn_form extends moodleform {
         global $DB, $USER, $CFG;
 
         $mform =& $this->_form;
-        $mform->addElement('header', '', get_string('reportcolumn','block_configurable_reports'), '');
+        $mform->addElement('header', '', get_string('reportcolumn','report_configreports'), '');
 
-		$reportid = optional_param('reportid',0,PARAM_INT);
-		if($actualrid = $this->_customdata['pluginclass']->get_current_report($this->_customdata['report']))
-			$reportid = $actualrid;
-		
-		$reports = $this->_customdata['pluginclass']->get_user_reports(); 
+        $reportid = optional_param('reportid',0,PARAM_INT);
+        if ($actualrid = $this->_customdata['pluginclass']->get_current_report($this->_customdata['report']))
+            $reportid = $actualrid;
+
+        $reports = $this->_customdata['pluginclass']->get_user_reports(); 
         $reportoptions = array(0=>get_string('choose'));
-		
-		if($reports)
-			foreach($reports as $r)
-				$reportoptions[$r->id] = format_string($r->name);
-		
-		$furl = "$CFG->wwwroot/blocks/configurable_reports/editplugin.php?id=".$this->_customdata['report']->id."&comp=columns&pname=reportcolumn";
-		$options = array('onchange'=>'location.href="'.$furl.'&reportid="+document.getElementById("id_reportid").value');
-		if($actualrid)
-			$options['disabled'] = 'disabled';
-		
-		$mform->addElement('select', 'reportid', get_string('report','block_configurable_reports'), $reportoptions, $options);
-		$mform->setDefault('reportid',$reportid);
-						
-		$columnsoptions = $this->_customdata['pluginclass']->get_report_columns($reportid);
-		$mform->addElement('select', 'column', get_string('column','block_configurable_reports'), $columnsoptions);
-		       
-		$this->_customdata['compclass']->add_form_elements($mform,$this); 
-		
+
+        if ($reports)
+            foreach ($reports as $r)
+                $reportoptions[$r->id] = format_string($r->name);
+
+        $furl = "$CFG->wwwroot/report/configreports/editplugin.php?id=".$this->_customdata['report']->id."&comp=columns&pname=reportcolumn";
+        $options = array('onchange'=>'location.href="'.$furl.'&reportid="+document.getElementById("id_reportid").value');
+        if ($actualrid)
+            $options['disabled'] = 'disabled';
+
+        $mform->addElement('select', 'reportid', get_string('report','report_configreports'), $reportoptions, $options);
+        $mform->setDefault('reportid',$reportid);
+                
+        $columnsoptions = $this->_customdata['pluginclass']->get_report_columns($reportid);
+        $mform->addElement('select', 'column', get_string('column','report_configreports'), $columnsoptions);
+       
+        $this->_customdata['compclass']->add_form_elements($mform,$this); 
+
         // buttons
         $this->add_action_buttons(true, get_string('add'));
 
     }
 
-	function validation($data, $files){
-		$errors = parent::validation($data, $files);
-		
-		$errors = $this->_customdata['compclass']->validate_form_elements($data,$errors);
-		
-		if(!$data['reportid'])
-			$errors['reportid'] = get_string('missingcolumn','block_configurable_reports');
-			
-		if(!isset($data['column']))
-			$errors['column'] = get_string('missingcolumn','block_configurable_reports');
-				
-		return $errors;
-	}	
-	
+    function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+
+        $errors = $this->_customdata['compclass']->validate_form_elements($data,$errors);
+
+        if (!$data['reportid'])
+            $errors['reportid'] = get_string('missingcolumn','report_configreports');
+    
+        if (!isset($data['column']))
+            $errors['column'] = get_string('missingcolumn','report_configreports');
+        
+        return $errors;
+    }    
+    
 }
 
 ?>

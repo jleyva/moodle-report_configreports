@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */  
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */  
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -34,40 +35,40 @@ class conditions_form extends moodleform {
 
         $mform =& $this->_form;
 
-		$mform->addElement('static', 'help','',get_string('conditionexprhelp','block_configurable_reports'));
-        $mform->addElement('text', 'conditionexpr', get_string('conditionexpr','block_configurable_reports'),'size="50"');
-		$mform->addHelpButton('conditionexpr','conditionexpr_conditions', 'block_configurable_reports');
-	   
+        $mform->addElement('static', 'help','',get_string('conditionexprhelp','report_configreports'));
+        $mform->addElement('text', 'conditionexpr', get_string('conditionexpr','report_configreports'),'size="50"');
+        $mform->addHelpButton('conditionexpr','conditionexpr_conditions', 'report_configreports');
+       
         // buttons
         $this->add_action_buttons(true, get_string('update'));
 
     }
 
-	function validation($data, $files){
-		$errors = parent::validation($data, $files);
-		// TODO - this reg expr can be improved
-		if(!preg_match("/(\(*\s*\bc\d{1,2}\b\s*\(*\)*\s*(\(|and|or|not)\s*)+\(*\s*\bc\d{1,2}\b\s*\(*\)*\s*$/i",$data['conditionexpr']))
-			$errors['conditionexpr'] = get_string('badconditionexpr','block_configurable_reports');
-			
-		if(substr_count($data['conditionexpr'],'(') != substr_count($data['conditionexpr'],')'))
-			$errors['conditionexpr'] = get_string('badconditionexpr','block_configurable_reports');
-			
-		if(isset($this->_customdata['elements']) && is_array($this->_customdata['elements'])){
-			$elements = $this->_customdata['elements'];
-			$nel = count($elements);
-			if(!empty($elements) && $nel > 1){
-				preg_match_all('/(\d+)/',$data['conditionexpr'],$matches,PREG_PATTERN_ORDER);
-				foreach($matches[0] as $num){
-					if($num > $nel){
-						$errors['conditionexpr'] = get_string('badconditionexpr','block_configurable_reports');
-						break;
-					}
-				}
-			}
-		}
-		
-		return $errors;
-	}	
+    function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+        // TODO - this reg expr can be improved
+        if (!preg_match("/(\(*\s*\bc\d{1,2}\b\s*\(*\)*\s*(\(|and|or|not)\s*)+\(*\s*\bc\d{1,2}\b\s*\(*\)*\s*$/i",$data['conditionexpr']))
+            $errors['conditionexpr'] = get_string('badconditionexpr','report_configreports');
+    
+        if (substr_count($data['conditionexpr'],'(') != substr_count($data['conditionexpr'],')'))
+            $errors['conditionexpr'] = get_string('badconditionexpr','report_configreports');
+    
+        if (isset($this->_customdata['elements']) && is_array($this->_customdata['elements'])) {
+            $elements = $this->_customdata['elements'];
+            $nel = count($elements);
+            if (!empty($elements) && $nel > 1) {
+                preg_match_all('/(\d+)/',$data['conditionexpr'],$matches,PREG_PATTERN_ORDER);
+                foreach ($matches[0] as $num) {
+                    if ($num > $nel) {
+                        $errors['conditionexpr'] = get_string('badconditionexpr','report_configreports');
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $errors;
+    }    
 }
 
 ?>

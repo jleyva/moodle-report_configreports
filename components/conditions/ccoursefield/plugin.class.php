@@ -16,50 +16,51 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */ 
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */ 
 
-require_once($CFG->dirroot.'/blocks/configurable_reports/plugin.class.php');
+require_once($CFG->dirroot.'/report/configreports/plugin.class.php');
 
 class plugin_ccoursefield extends plugin_base{
-	
-	function init(){
-		$this->fullname = get_string('ccoursefield','block_configurable_reports');
-		$this->reporttypes = array('courses');
-		$this->form = true;
-	}
-		
-	function summary($data){		
-		return get_string($data->field).' '.$data->operator.' '.$data->value;
-		
-	}
-	
-	// data -> Plugin configuration data
-	function execute($data,$user,$courseid){
-		global $DB;
-		
-		$data->value = $data->value;
-		$ilike = " LIKE "; // TODO - Use $DB->sql_like()
-	
-		switch($data->operator){
-			case 'LIKE % %': 	$sql = "$data->field $ilike ?";
-								$params = array("%$data->value%");
-								break;						
-			default:	$sql = "$data->field $data->operator ?";
-						$params = array($data->value);
-		}
-		
-		$courses = $DB->get_records_select('course',$sql, $params);
+    
+    function init() {
+        $this->fullname = get_string('ccoursefield','report_configreports');
+        $this->reporttypes = array('courses');
+        $this->form = true;
+    }
 
-		if($courses)
-			return array_keys($courses);
+    function summary($data) {
+        return get_string($data->field).' '.$data->operator.' '.$data->value;
 
-		return array();
-	}
-	
+    }
+    
+    // data -> Plugin configuration data
+    function execute($data,$user,$courseid) {
+        global $DB;
+
+        $data->value = $data->value;
+        $ilike = " LIKE "; // TODO - Use $DB->sql_like()
+    
+        switch($data->operator) {
+            case 'LIKE % %':     $sql = "$data->field $ilike ?";
+                                $params = array("%$data->value%");
+                                break;                
+            default:    $sql = "$data->field $data->operator ?";
+                        $params = array($data->value);
+        }
+
+        $courses = $DB->get_records_select('course',$sql, $params);
+
+        if ($courses)
+            return array_keys($courses);
+
+        return array();
+    }
+    
 }
 
 ?>

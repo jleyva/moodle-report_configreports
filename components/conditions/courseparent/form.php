@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -34,19 +35,19 @@ class courseparent_form extends moodleform {
 
         $mform =& $this->_form;
 
-        $mform->addElement('header', '', get_string('courseparent','block_configurable_reports'), '');
+        $mform->addElement('header', '', get_string('courseparent','report_configreports'), '');
 
-		$options = array();
-		$options[0] = get_string('choose');
-		
-		if($courses = $DB->get_records_sql('SELECT c.id, fullname FROM {course} c, {course_meta} cm WHERE c.id = cm.parent_course GROUP BY (parent_course)')){
-			foreach($courses as $c){
-				$options[$c->id] = format_string($c->fullname);
-			}
-		}
-		
-		$mform->addElement('select', 'courseid', get_string('course'), $options);
-				
+        $options = array();
+        $options[0] = get_string('choose');
+
+        if ($courses = $DB->get_records_sql('SELECT c.id, fullname FROM {course} c, {course_meta} cm WHERE c.id = cm.parent_course GROUP BY (parent_course)')) {
+            foreach ($courses as $c) {
+                $options[$c->id] = format_string($c->fullname);
+            }
+        }
+
+        $mform->addElement('select', 'courseid', get_string('course'), $options);
+        
         // buttons
         $this->add_action_buttons(true, get_string('add'));
 

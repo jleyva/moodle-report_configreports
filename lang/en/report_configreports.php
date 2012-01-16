@@ -14,7 +14,7 @@ $string['columns'] = "Columns";
 $string['conditions'] = "Conditions";
 $string['permissions'] = "Permissions";
 $string['plot'] = "Plot - Graphs";
-$string['filters'] = "Filters	";
+$string['filters'] = "Filters    ";
 $string['calcs'] = "Calculations";
 $string['ordering'] = "Ordering";
 $string['customsql'] = "Custom SQL";
@@ -43,6 +43,7 @@ $string['export_ods'] = "Export in ODS format";
 $string['export_xls'] = "Export in XLS format";
 $string['viewreport'] = "View report";
 $string['norecordsfound'] = "No records found";
+$string['jsordering'] = 'JavaScript Ordering';
 
 // Columns
 $string['column'] = "Column";
@@ -184,7 +185,7 @@ $string['noexplicitprefix'] = "No explicit prefix";
 $string['queryfailed'] = "Query failed";
 $string['norowsreturned'] = "No rows returned";
 
-$string['listofsqlreports'] = '<a href=\"http://docs.moodle.org/en/ad-hoc_contributed_reports\" target=\"_blank\">List of SQL Contributed reports</a>';
+$string['listofsqlreports'] = '<a href="http://docs.moodle.org/en/ad-hoc_contributed_reports" target="_blank">List of SQL Contributed reports</a>';
 
 $string['usersincoursereport_summary'] = "Any user in the current report course";
 
@@ -241,4 +242,91 @@ $string['includesubcats'] = 'Include subcategories';
 
 $string['coursededicationtime'] = 'Course dedication time';
 
-?>
+$string['jsordering_help'] = 'JavaScript Ordering allow you to order the report table without reloading the page';
+$string['pagination_help'] = 'Number of records to show in each page. Zero means no pagination';
+$string['typeofreport_help'] = 'Choose the type of report you want to create.
+For security, SQL Report requires an additional capability';
+$string['template_marks'] = 'Template marks';
+$string['template_marks_help'] = '<p>You can use any of this replacement marks:</p>
+
+<ul>
+<li>##reportname## - For including the report name</li>
+<li>##reportsummary## - For including the reports summary</li>
+<li>##graphs## - For including the graphs</li>
+<li>##exportoptions## - For including the export options</li>
+<li>##calculationstable## - For including the calculations table</li>
+<li>##pagination## - For including the pagination </li>
+
+</ul>';
+
+$string['conditionexpr_conditions'] = $string['conditionexpr'];
+$string['conditionexpr_conditions_help'] = '<p>You can combine conditions using a logic expression</p>
+
+<p>Enter a valid logic expression with these operators: and, or, nor.</p>';
+
+$string['conditionexpr_permissions'] = $string['conditionexpr'];
+$string['conditionexpr_permissions_help'] = '<p>You can combine conditions using a logic expression</p>
+
+<p>Enter a valid logic expression with these operators: and, or.</p>';
+
+$string['reporttable_help'] = '<p>This is the width of the table that will display the report records.</p>
+
+<p>If you use a Template this option has no effect</p>';
+
+$string['comp_calcs'] = $string['calcs'];
+$string['comp_calcs_help'] = '<p>Here you can add calculations for columns, i.e: average of number of users enrolled in courses</p>
+
+<p>More help: <a href="http://docs.moodle.org/en/report/configreports/" target="_blank">Plugin documentation</a></p>';
+
+$string['comp_calculations'] = $string['calcs'];
+$string['comp_calculations_help'] = '<p>Here you can add calculations for columns, i.e: average of number of users enrolled in courses</p>';
+$string['comp_conditions'] = $string['conditions'];
+$string['comp_conditions_help'] = '<p>Here you can define the conditions (i.e, only courses from this category, only users from Spain, etc.. </p>
+
+<p>You can add a logical expression if you are using more than one condition.</p>
+
+<p>More help: <a href="http://docs.moodle.org/en/report/configreports/" target="_blank">Plugin documentation</a></p>';
+$string['comp_customsql'] = $string['customsql'];
+$string['comp_customsql_help'] = '<p>Add a working SQL query. Do no use the moodle database prefix $CFG->prefix instead use "prefix_" without quotes</p>
+<p>Example: SELECT * FROM prefix_course</p>
+
+<p>You can find a lot of SQL Reports here: <a href="http://docs.moodle.org/en/ad-hoc_contributed_reports" target="_blank">ad-hoc contributed reports</a></p>
+
+<p>Since this block supports Tim Hunt\'s CustomSQL Queries Reports, you can use any query.</p>
+
+<p>Remember to add a "Time filter" if you are going to use reports with time tokens. </p>
+
+<p>For using filters see: <a href="http://docs.moodle.org/en/report/configreports/#Creating_a_SQL_Report" target="_blank">Creating a SQL Report Tutorial</a></p>';
+
+$string['comp_ordering'] = $string['ordering'];
+$string['comp_ordering_help'] = '<p>Here you can choose how to order the report using fields and directions</p>
+
+<p>More help: <a href="http://docs.moodle.org/en/report/configreports/" target="_blank">Plugin documentation</a></p>';
+$string['comp_permissions'] = $string['permissions'];
+$string['comp_permissions_help'] = '<p>Here you can choose who can view a report.</p>
+
+<p>You can add a logical expression to calculate the final permission if you are using more than one condition.</p>
+
+<p>More help: <a href="http://docs.moodle.org/en/report/configreports/" target="_blank">Plugin documentation</a></p>';
+$string['comp_plot'] = $string['plot'];
+$string['comp_plot_help'] = '<p>Here you can add graphs to your report based on the report columns and values</p>
+
+<p>More help: <a href="http://docs.moodle.org/en/report/configreports/" target="_blank">Plugin documentation</a></p>';
+$string['comp_template'] = $string['template'];
+$string['comp_template_help'] = '<p>You can modify the report\'s layout by creating a template</p>
+
+<p>For creating a template see the replacemnet marks you can use in header, footer and for each report record using the help buttons or the information displayed in the same page.</p>
+
+<p>More help: <a href="http://docs.moodle.org/en/report/configreports/" target="_blank">Plugin documentation</a></p>';
+$string['comp_filters'] = $string['filters'];
+$string['comp_filters_help'] = '<p>Here you can choose which filters will be displayed</p>
+
+<p>A filter lets an user to choose columns from the report to filter the report results</p>
+
+<p>For using filters if your report type is SQL see: <a href="http://docs.moodle.org/en/report/configreports/#Creating_a_SQL_Report" target="_blank">Creating a SQL Report Tutorial</a></p>
+
+<p>More help: <a href="http://docs.moodle.org/en/report/configreports/" target="_blank">Plugin documentation</a></p>';
+$string['comp_columns'] = $string['columns'];
+$string['comp_columns_help'] = '<p>Here you can choose the differents columns of your report depending on the type of report</p>
+
+<p>More help: <a href="http://docs.moodle.org/en/report/configreports/" target="_blank">Plugin documentation</a></p>';

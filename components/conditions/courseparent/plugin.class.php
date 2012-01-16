@@ -16,43 +16,44 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */ 
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */ 
 
-require_once($CFG->dirroot.'/blocks/configurable_reports/plugin.class.php');
+require_once($CFG->dirroot.'/report/configreports/plugin.class.php');
 
 class plugin_courseparent extends plugin_base{
-	
-	function init(){
-		$this->fullname = get_string('courseparent','block_configurable_reports');
-		$this->form = true;
-		$this->reporttypes = array('courses');
-	}
-	
-	function summary($data){
-		global $DB;
-		
-		$course = $DB->get_record('course',array('id' => $data->courseid));
-		if($course)
-			return get_string('courseparent','block_configurable_reports').' '.(format_string($course->fullname));
-		return '';
-	}
-	
-	// data -> Plugin configuration data
-	function execute($data,$user,$courseid){
-		global $DB;
-		
-		$finalcourses = array();
-		if($courses = $DB->get_records('course_meta',array('parent_course' => $data->courseid))){
-			foreach($courses as $c)
-				$finalcourses[] = $c->child_course;
-		}
-		return $finalcourses;
-	}
-	
+    
+    function init() {
+        $this->fullname = get_string('courseparent','report_configreports');
+        $this->form = true;
+        $this->reporttypes = array('courses');
+    }
+    
+    function summary($data) {
+        global $DB;
+
+        $course = $DB->get_record('course',array('id' => $data->courseid));
+        if ($course)
+            return get_string('courseparent','report_configreports').' '.(format_string($course->fullname));
+        return '';
+    }
+    
+    // data -> Plugin configuration data
+    function execute($data,$user,$courseid) {
+        global $DB;
+
+        $finalcourses = array();
+        if ($courses = $DB->get_records('course_meta',array('parent_course' => $data->courseid))) {
+            foreach ($courses as $c)
+                $finalcourses[] = $c->child_course;
+        }
+        return $finalcourses;
+    }
+    
 }
 
 ?>

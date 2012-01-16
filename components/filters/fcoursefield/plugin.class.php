@@ -16,77 +16,78 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-require_once($CFG->dirroot.'/blocks/configurable_reports/plugin.class.php');
+require_once($CFG->dirroot.'/report/configreports/plugin.class.php');
 
 class plugin_fcoursefield extends plugin_base{
-	
-	function init(){
-		$this->form = true;
-		$this->unique = true;
-		$this->fullname = get_string('fcoursefield','block_configurable_reports');
-		$this->reporttypes = array('courses');
-	}
-	
-	function summary($data){
-		return $data->field;
-	}
-	
-	function execute($finalelements,$data){
-		
-		$filter_fcoursefield = optional_param('filter_fcoursefield_'.$data->field,0,PARAM_RAW);		
-		if($filter_fcoursefield){
-			// addslashes is done in clean param
-			$filter = clean_param(base64_decode($filter_fcoursefield),PARAM_CLEAN);
-			list($usql, $params) = $DB->get_in_or_equal($finalelements);			
-			$sql = "$data->field = ? AND id $usql";
-			$params = array_merge(array($filter),$params);
-			if($elements = $DB->get_records_select('course',$sql,$params)){
-				$finalelements = array_keys($elements);
-			}
-		}
-		return $finalelements;
-	}
-	
-	function print_filter(&$mform, $data){
-		global $DB, $CFG;
-		
-		$columns = $DB->get_columns('course');
-		$filteroptions = array();
-		$filteroptions[''] = get_string('choose');
-		
-		$coursecolumns = array();
-		foreach($columns as $c)
-			$coursecolumns[$c->name] = $c->name;
-			
-		if(!isset($coursecolumns[$data->field]))
-			print_error('nosuchcolumn');
-			
-		$reportclassname = 'report_'.$this->report->type;	
-		$reportclass = new $reportclassname($this->report);
-				
-		$components = cr_unserialize($this->report->components);		
-		$conditions = $components['conditions'];
-		$courselist = $reportclass->elements_by_conditions($conditions);
-				
-		if(!empty($courselist)){
-			if($rs = $DB->get_recordset_sql('SELECT DISTINCT('.$data->field.') as ufield FROM {course} WHERE '.$data->field.' <> "" ORDER BY ufield ASC', null)){
-				foreach($rs as $u){
-					$filteroptions[base64_encode($u->ufield)] = $u->ufield;
-				}
-				$rs->close();
-			}
-		}
-		
-		$mform->addElement('select', 'filter_fcoursefield_'.$data->field, get_string($data->field), $filteroptions);
-		$mform->setType('filter_courses', PARAM_INT);
-		
-	}	
+    
+    function init() {
+        $this->form = true;
+        $this->unique = true;
+        $this->fullname = get_string('fcoursefield','report_configreports');
+        $this->reporttypes = array('courses');
+    }
+    
+    function summary($data) {
+        return $data->field;
+    }
+    
+    function execute($finalelements,$data) {
+
+        $filter_fcoursefield = optional_param('filter_fcoursefield_'.$data->field,0,PARAM_RAW);
+        if ($filter_fcoursefield) {
+            // addslashes is done in clean param
+            $filter = clean_param(base64_decode($filter_fcoursefield),PARAM_CLEAN);
+            list($usql, $params) = $DB->get_in_or_equal($finalelements);    
+            $sql = "$data->field = ? AND id $usql";
+            $params = array_merge(array($filter),$params);
+            if ($elements = $DB->get_records_select('course',$sql,$params)) {
+                $finalelements = array_keys($elements);
+            }
+        }
+        return $finalelements;
+    }
+    
+    function print_filter(&$mform, $data) {
+        global $DB, $CFG;
+
+        $columns = $DB->get_columns('course');
+        $filteroptions = array();
+        $filteroptions[''] = get_string('choose');
+
+        $coursecolumns = array();
+        foreach ($columns as $c)
+            $coursecolumns[$c->name] = $c->name;
+    
+        if (!isset($coursecolumns[$data->field]))
+            print_error('nosuchcolumn');
+    
+        $reportclassname = 'report_'.$this->report->type;    
+        $reportclass = new $reportclassname($this->report);
+        
+        $components = cr_unserialize($this->report->components);
+        $conditions = $components['conditions'];
+        $courselist = $reportclass->elements_by_conditions($conditions);
+        
+        if (!empty($courselist)) {
+            if ($rs = $DB->get_recordset_sql('SELECT DISTINCT('.$data->field.') as ufield FROM {course} WHERE '.$data->field.' <> "" ORDER BY ufield ASC', null)) {
+                foreach ($rs as $u) {
+                    $filteroptions[base64_encode($u->ufield)] = $u->ufield;
+                }
+                $rs->close();
+            }
+        }
+
+        $mform->addElement('select', 'filter_fcoursefield_'.$data->field, get_string($data->field), $filteroptions);
+        $mform->setType('filter_courses', PARAM_INT);
+
+    }    
 }
 
 ?>

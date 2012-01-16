@@ -16,36 +16,37 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */ 
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */ 
 
-require_once($CFG->dirroot.'/blocks/configurable_reports/plugin.class.php');
+require_once($CFG->dirroot.'/report/configreports/plugin.class.php');
 
 class plugin_currentreportcourse extends plugin_base{
-	
-	function init(){
-		$this->fullname = get_string('currentreportcourse','block_configurable_reports');
-		$this->form = false;
-		$this->reporttypes = array('courses');
-	}
-	
-	function summary($data){
-		return get_string('currentreportcourse_summary','block_configurable_reports');
-	}
-	
-	// data -> Plugin configuration data
-	function execute($data,$user,$courseid){
-		global $DB;
+    
+    function init() {
+        $this->fullname = get_string('currentreportcourse','report_configreports');
+        $this->form = false;
+        $this->reporttypes = array('courses');
+    }
+    
+    function summary($data) {
+        return get_string('currentreportcourse_summary','report_configreports');
+    }
+    
+    // data -> Plugin configuration data
+    function execute($data,$user,$courseid) {
+        global $DB;
 
-		$finalcourses = array();
-		$finalcourses[] = $courseid;
-		
-		return $finalcourses;
-	}
-	
+        $finalcourses = array();
+        $finalcourses[] = $courseid;
+
+        return $finalcourses;
+    }
+    
 }
 
 ?>

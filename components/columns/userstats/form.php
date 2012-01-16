@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */ 
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */ 
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -34,32 +35,32 @@ class userstats_form extends moodleform {
 
         $mform =& $this->_form;
 
-        $mform->addElement('header', '', get_string('userstats','block_configurable_reports'), '');
+        $mform->addElement('header', '', get_string('userstats','report_configreports'), '');
 
-        $userstats = array('logins'=>get_string('statslogins','block_configurable_reports'),'activityview'=>get_string('activityview','block_configurable_reports'),'activitypost'=>get_string('activitypost','block_configurable_reports'));
-		$userstats['coursededicationtime'] = get_string('coursededicationtime','block_configurable_reports');
-		
-		$mform->addElement('select', 'stat', get_string('stat','block_configurable_reports'), $userstats);
-		
-		$this->_customdata['compclass']->add_form_elements($mform,$this); 	
+        $userstats = array('logins'=>get_string('statslogins','report_configreports'),'activityview'=>get_string('activityview','report_configreports'),'activitypost'=>get_string('activitypost','report_configreports'));
+        $userstats['coursededicationtime'] = get_string('coursededicationtime','report_configreports');
+
+        $mform->addElement('select', 'stat', get_string('stat','report_configreports'), $userstats);
+
+        $this->_customdata['compclass']->add_form_elements($mform,$this);     
        
         // buttons
         $this->add_action_buttons(true, get_string('add'));
 
     }
 
-	function validation($data, $files){
-		global $DB, $CFG;
-		$errors = parent::validation($data, $files);
-		
-		$errors = $this->_customdata['compclass']->validate_form_elements($data,$errors);
-		
-		if(!isset($CFG->enablestats) || !$CFG->enablestats)
-			$errors['stat'] = get_string('globalstatsshouldbeenabled','block_configurable_reports');
-		
-		return $errors;
-	}
-	
+    function validation($data, $files) {
+        global $DB, $CFG;
+        $errors = parent::validation($data, $files);
+
+        $errors = $this->_customdata['compclass']->validate_form_elements($data,$errors);
+
+        if (!isset($CFG->enablestats) || !$CFG->enablestats)
+            $errors['stat'] = get_string('globalstatsshouldbeenabled','report_configreports');
+
+        return $errors;
+    }
+    
 }
 
 ?>

@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -34,40 +35,40 @@ class usermodactions_form extends moodleform {
 
         $mform =& $this->_form;
 
-        $mform->addElement('header', '', get_string('usermodactions','block_configurable_reports'), '');
-		
-		$columns = $DB->get_columns('user');
-		
-		$modules = array();
-		
-		// Fix for http://tracker.moodle.org/browse/CONTRIB-2945
-		require_once($CFG->dirroot."/course/lib.php");
-		get_all_mods($this->_customdata['report']->courseid, $mods, $modnames, $modnamesplural, $modnamesused);
-		
-		if($mods){
-			foreach($mods as $m){
-				$instance = $DB->get_record("$m->modname",array( "id" =>  "$m->instance"));
-				$modules[$m->id] = $instance->name;
-			}
-		}
-		
-        $mform->addElement('select', 'cmid', get_string('module','block_configurable_reports'), $modules);
+        $mform->addElement('header', '', get_string('usermodactions','report_configreports'), '');
 
-		$this->_customdata['compclass']->add_form_elements($mform,$this); 		
-		
+        $columns = $DB->get_columns('user');
+
+        $modules = array();
+
+        // Fix for http://tracker.moodle.org/browse/CONTRIB-2945
+        require_once($CFG->dirroot."/course/lib.php");
+        get_all_mods($this->_customdata['report']->courseid, $mods, $modnames, $modnamesplural, $modnamesused);
+
+        if ($mods) {
+            foreach ($mods as $m) {
+                $instance = $DB->get_record("$m->modname",array( "id" =>  "$m->instance"));
+                $modules[$m->id] = $instance->name;
+            }
+        }
+
+        $mform->addElement('select', 'cmid', get_string('module','report_configreports'), $modules);
+
+        $this->_customdata['compclass']->add_form_elements($mform,$this); 
+
         // buttons
         $this->add_action_buttons(true, get_string('add'));
 
     }
 
-	function validation($data, $files){
-		$errors = parent::validation($data, $files);
-		
-		$errors = $this->_customdata['compclass']->validate_form_elements($data,$errors);
-		
-		return $errors;
-	}
-	
+    function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+
+        $errors = $this->_customdata['compclass']->validate_form_elements($data,$errors);
+
+        return $errors;
+    }
+    
 }
 
 ?>

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $string['blockname'] = "מעצב דוחות";
 $string['report_courses'] = "דוח קורסים";
@@ -13,7 +13,7 @@ $string['columns'] = "עמודות";
 $string['conditions'] = "התניות";
 $string['permissions'] = "הרשאות";
 $string['plot'] = "צייר גרפים";
-$string['filters'] = "פילטרים	";
+$string['filters'] = "פילטרים    ";
 $string['calcs'] = "חישובים";
 $string['ordering'] = "סידור";
 $string['customsql'] = "מותאם SQL";

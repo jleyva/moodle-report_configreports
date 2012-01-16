@@ -16,37 +16,38 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
  
  class component_base {
-	
-	var $plugins = false;
-	var $ordering = false;
-	var $form = false;
-	var $help = '';
-	
-	function component_base($report){
-		global $DB, $CFG;
-		
-		if(is_numeric($report))
-			$this->config = $DB->get_record('block_configurable_reports_report',array('id' => $report));
-		else
-			$this->config = $report;
-		$this->init();
-	}
-	
-	function __construct($report) {
-		$this->component_base($report);
-	}
-	
-	function add_form_elements(&$mform,$fullform){
-		return false;
-	}
-	
+    
+    var $plugins = false;
+    var $ordering = false;
+    var $form = false;
+    var $help = '';
+    
+    function component_base($report) {
+        global $DB, $CFG;
+
+        if (is_numeric($report))
+            $this->config = $DB->get_record('report_configreports',array('id' => $report));
+        else
+            $this->config = $report;
+        $this->init();
+    }
+    
+    function __construct($report) {
+        $this->component_base($report);
+    }
+    
+    function add_form_elements(&$mform,$fullform) {
+        return false;
+    }
+    
  }
 
 ?>

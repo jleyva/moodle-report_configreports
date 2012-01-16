@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */ 
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */ 
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -34,21 +35,21 @@ class fcoursefield_form extends moodleform {
 
         $mform =& $this->_form;
 
-        $mform->addElement('header', '', get_string('fcoursefield','block_configurable_reports'), '');
+        $mform->addElement('header', '', get_string('fcoursefield','report_configreports'), '');
 
-		$this->_customdata['compclass']->add_form_elements($mform,$this); 
-		
-		$columns = $DB->get_columns('course');
-		
-		$coursecolumns = array();
-		foreach($columns as $c)
-			$coursecolumns[$c->name] = $c->name;
-			
-		unset($coursecolumns['password']);
-		unset($coursecolumns['sesskey']);
-			
-        $mform->addElement('select', 'field', get_string('field','block_configurable_reports'), $coursecolumns);
-		
+        $this->_customdata['compclass']->add_form_elements($mform,$this); 
+
+        $columns = $DB->get_columns('course');
+
+        $coursecolumns = array();
+        foreach ($columns as $c)
+            $coursecolumns[$c->name] = $c->name;
+    
+        unset($coursecolumns['password']);
+        unset($coursecolumns['sesskey']);
+    
+        $mform->addElement('select', 'field', get_string('field','report_configreports'), $coursecolumns);
+
        
         // buttons
         $this->add_action_buttons(true, get_string('add'));

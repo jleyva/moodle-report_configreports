@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */ 
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */ 
 
 // Based on Custom SQL Reports Plugin
 // See http://moodle.org/mod/data/view.php?d=13&rid=2884
@@ -37,13 +38,13 @@ class customsql_form extends moodleform {
 
         $mform =& $this->_form;
 
-        $mform->addElement('textarea', 'querysql', get_string('querysql', 'block_configurable_reports'),
+        $mform->addElement('textarea', 'querysql', get_string('querysql', 'report_configreports'),
                 'rows="25" cols="60"');
         $mform->addRule('querysql', get_string('required'),
                 'required', null, 'client');
         $mform->setType('querysql', PARAM_RAW);
 
-        $mform->addElement('static', 'note', '', get_string('listofsqlreports', 'block_configurable_reports'));
+        $mform->addElement('static', 'note', '', get_string('listofsqlreports', 'report_configreports'));
 
         $this->add_action_buttons();
     }
@@ -54,11 +55,11 @@ class customsql_form extends moodleform {
         $errors = parent::validation($data, $files);
 
         $sql = $data['querysql'];
-		$sql = trim($sql);
+        $sql = trim($sql);
 
         // Simple test to avoid evil stuff in the SQL.
         if (preg_match('/\b(ALTER|CREATE|DELETE|DROP|GRANT|INSERT|INTO|TRUNCATE|UPDATE|SET|VACUUM|REINDEX|DISCARD|LOCK)\b/i', $sql)) {
-            $errors['querysql'] = get_string('notallowedwords', 'block_configurable_reports');
+            $errors['querysql'] = get_string('notallowedwords', 'report_configreports');
 
         // Do not allow any semicolons.
         } else if (strpos($sql, ';') !== false) {
@@ -66,18 +67,18 @@ class customsql_form extends moodleform {
 
         // Make sure prefix is prefix_, not explicit.
         } else if ($CFG->prefix != '' && preg_match('/\b' . $CFG->prefix . '\w+/i', $sql)) {
-            $errors['querysql'] = get_string('noexplicitprefix', 'block_configurable_reports');
+            $errors['querysql'] = get_string('noexplicitprefix', 'report_configreports');
 
-		// Now try running the SQL, and ensure it runs without errors.
+        // Now try running the SQL, and ensure it runs without errors.
         } else {
-            
-			$sql = $this->_customdata['reportclass']->prepare_sql($sql);
+    
+            $sql = $this->_customdata['reportclass']->prepare_sql($sql);
             $rs = $this->_customdata['reportclass']->execute_query($sql, 2);
             if (!$rs) {
-                $errors['querysql'] = get_string('queryfailed', 'block_configurable_reports', $db->ErrorMsg());
+                $errors['querysql'] = get_string('queryfailed', 'report_configreports', $db->ErrorMsg());
             } else if (!empty($data['singlerow'])) {
                 if (rs_EOF($rs)) {
-                    $errors['querysql'] = get_string('norowsreturned', 'block_configurable_reports');
+                    $errors['querysql'] = get_string('norowsreturned', 'report_configreports');
                 } 
             }
 

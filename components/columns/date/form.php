@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */  
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */  
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -34,24 +35,24 @@ class date_form extends moodleform {
 
         $mform =& $this->_form;
 
-        $mform->addElement('header', '', get_string('date','block_configurable_reports'), '');
-		
-		$this->_customdata['compclass']->add_form_elements($mform,$this); 
-		
-		$mform->addElement('select', 'date', get_string('date','block_configurable_reports'), array('starttime'=>get_string('starttime','block_configurable_reports'),'endtime'=>get_string('endtime','block_configurable_reports')));
-		
-		$formats = array(''=>get_string('default'), 'custom'=>get_string('custom','block_configurable_reports'));
-		foreach(array('%A, %d %B %Y', '%d %B %Y', '%d/%B/%Y', '%B %d %Y') as $f)
-			$formats[$f] = $f;
-		
-		$mform->addElement('select', 'dateformat', get_string('dateformat','block_configurable_reports'), $formats);
-		$mform->addElement('text', 'customdateformat', get_string('customdateformat','block_configurable_reports'));
-		$mform->disabledIf('customdateformat','dateformat','neq','custom');
+        $mform->addElement('header', '', get_string('date','report_configreports'), '');
 
-		// buttons
+        $this->_customdata['compclass']->add_form_elements($mform,$this); 
+
+        $mform->addElement('select', 'date', get_string('date','report_configreports'), array('starttime'=>get_string('starttime','report_configreports'),'endtime'=>get_string('endtime','report_configreports')));
+
+        $formats = array(''=>get_string('default'), 'custom'=>get_string('custom','report_configreports'));
+        foreach (array('%A, %d %B %Y', '%d %B %Y', '%d/%B/%Y', '%B %d %Y') as $f)
+            $formats[$f] = $f;
+
+        $mform->addElement('select', 'dateformat', get_string('dateformat','report_configreports'), $formats);
+        $mform->addElement('text', 'customdateformat', get_string('customdateformat','report_configreports'));
+        $mform->disabledif ('customdateformat','dateformat','neq','custom');
+
+        // buttons
         $this->add_action_buttons(true, get_string('add'));
-		
-    }	
+
+    }    
 }
 
 ?>
