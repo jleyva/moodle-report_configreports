@@ -16,97 +16,98 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating Configurable Reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating Configurable Reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
     require_once("../../config.php");
-	require_once($CFG->dirroot."/blocks/configurable_reports/locallib.php");
-	
-	$id = required_param('id', PARAM_INT);
-	$download = optional_param('download',false,PARAM_BOOL);
-	$format = optional_param('format','',PARAM_ALPHA);
-	
-	if(! $report = $DB->get_record('block_configurable_reports_report',array('id' => $id)))
-		print_error('reportdoesnotexists','block_configurable_reports');
+    require_once($CFG->dirroot."/report/configreports/locallib.php");
+    
+    $id = required_param('id', PARAM_INT);
+    $download = optional_param('download',false,PARAM_BOOL);
+    $format = optional_param('format','',PARAM_ALPHA);
+    
+    if (! $report = $DB->get_record('report_configreports',array('id' => $id)))
+        print_error('reportdoesnotexists','report_configreports');
 
-	$courseid = $report->courseid;
-	
-	if (! $course = $DB->get_record("course",array( "id" =>  $courseid)) ) {
-		print_error("No such course id");
-	}
+    $courseid = $report->courseid;
+    
+    if (! $course = $DB->get_record("course",array( "id" =>  $courseid)) ) {
+        print_error("No such course id");
+    }
 
-	// Force user login in course (SITE or Course)
+    // Force user login in course (SITE or Course)
     if ($course->id == SITEID)
-		require_login();
-	else
-		require_login($course);
+        require_login();
+    else
+        require_login($course);
 
-	
-	if ($course->id == SITEID)
-		$context = get_context_instance(CONTEXT_SYSTEM);
-	else
-		$context = get_context_instance(CONTEXT_COURSE, $course->id);
-		
-	require_once($CFG->dirroot.'/blocks/configurable_reports/report.class.php');
-	require_once($CFG->dirroot.'/blocks/configurable_reports/reports/'.$report->type.'/report.class.php');
-	
-	$reportclassname = 'report_'.$report->type;	
-	$reportclass = new $reportclassname($report);
+    
+    if ($course->id == SITEID)
+        $context = get_context_instance(CONTEXT_SYSTEM);
+    else
+        $context = get_context_instance(CONTEXT_COURSE, $course->id);
 
-	if (!$reportclass->check_permissions($USER->id, $context)){
-		print_error("badpermissions",'block_configurable_reports');
-	}
+    require_once($CFG->dirroot.'/report/configreports/report.class.php');
+    require_once($CFG->dirroot.'/report/configreports/reports/'.$report->type.'/report.class.php');
+    
+    $reportclassname = 'report_'.$report->type;    
+    $reportclass = new $reportclassname($report);
 
-	$PAGE->set_context($context);
-	$PAGE->set_pagelayout('report');
-	$PAGE->set_url('/blocks/configurable_reports/viewreport.php', array('id'=>$id));
-	
-	$reportclass->create_report();
-		
-	$download = ($download && $format && strpos($report->export,$format.',') !== false)? true : false;
-	
-	$action = ($download)? 'download' : 'view';
-	add_to_log($report->courseid, 'configurable_reports', $action, '/block/configurable_reports/viewreport.php?id='.$id, $report->name);
-	
-	// No download, build navigation header etc..
-	if(!$download){
-		$reportname = format_string($report->name);
-		$navlinks = array();
+    if (!$reportclass->check_permissions($USER->id, $context)) {
+        print_error("badpermissions",'report_configreports');
+    }
 
-		if(has_capability('block/configurable_reports:managereports', $context) || (has_capability('block/configurable_reports:manageownreports', $context)) && $report->ownerid == $USER->id )
-			$navlinks[] = array('name' => get_string('managereports','block_configurable_reports'), 'link' => $CFG->wwwroot.'/blocks/configurable_reports/managereport.php?courseid='.$report->courseid, 'type' => 'title');
-		
-		$navlinks[] = array('name' => $reportname, 'link' => null, 'type' => 'title');
-			
-		$navigation = build_navigation($navlinks);
+    $PAGE->set_context($context);
+    $PAGE->set_pagelayout('report');
+    $PAGE->set_url('/report/configreports/viewreport.php', array('id'=>$id));
+    
+    $reportclass->create_report();
 
-		$PAGE->set_title($reportname);
-		$PAGE->set_heading( $reportname);
-		$PAGE->set_cacheable( true);
-		echo $OUTPUT->header();
-		
-		if(has_capability('block/configurable_reports:managereports', $context) || (has_capability('block/configurable_reports:manageownreports', $context)) && $report->ownerid == $USER->id ){
-			$currenttab = 'viewreport';
-			include('tabs.php');
-		}
-		
-		// Print the report HTML	
-		$reportclass->print_report_page($context);
-	}
-	else{
-		$exportplugin = $CFG->dirroot.'/blocks/configurable_reports/export/'.$format.'/export.php';
-		if(file_exists($exportplugin)){
-			require_once($exportplugin);
-			export_report($reportclass->finalreport);
-		}
-		die;
-	}
-	
-	
-	// Never reached if download = true
+    $download = ($download && $format && strpos($report->export,$format.',') !== false)? true : false;
+    
+    $action = ($download)? 'download' : 'view';
+    add_to_log($report->courseid, 'configurable_reports', $action, '/report/configreports/viewreport.php?id='.$id, $report->name);
+    
+    // No download, build navigation header etc..
+    if (!$download) {
+        $reportname = format_string($report->name);
+        $navlinks = array();
+
+        if (has_capability('report/configreports:managereports', $context) || (has_capability('report/configreports:manageownreports', $context)) && $report->ownerid == $USER->id )
+            $navlinks[] = array('name' => get_string('managereports','report_configreports'), 'link' => $CFG->wwwroot.'/report/configreports/managereport.php?courseid='.$report->courseid, 'type' => 'title');
+
+        $navlinks[] = array('name' => $reportname, 'link' => null, 'type' => 'title');
+    
+        $navigation = build_navigation($navlinks);
+
+        $PAGE->set_title($reportname);
+        $PAGE->set_heading( $reportname);
+        $PAGE->set_cacheable( true);
+        echo $OUTPUT->header();
+
+        if (has_capability('report/configreports:managereports', $context) || (has_capability('report/configreports:manageownreports', $context)) && $report->ownerid == $USER->id ) {
+            $currenttab = 'viewreport';
+            include('tabs.php');
+        }
+
+        // Print the report HTML    
+        $reportclass->print_report_page($context);
+    }
+    else{
+        $exportplugin = $CFG->dirroot.'/report/configreports/export/'.$format.'/export.php';
+        if (file_exists($exportplugin)) {
+            require_once($exportplugin);
+            export_report($reportclass->finalreport);
+        }
+        die;
+    }
+    
+    
+    // Never reached if download = true
     echo $OUTPUT->footer();
 
 ?>

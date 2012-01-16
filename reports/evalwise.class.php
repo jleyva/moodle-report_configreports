@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 // evaluate postfix notation
 // modified to perform bitwise-like operations in arrays
@@ -29,21 +30,21 @@
 // - => ^ => array_diff
 
  class EvalWise extends EvalMath {
-		
-	var $data = array();
-	var $index = 0;
-	
-	function set_data($data){
-		$this->data = $data;
-		$this->index = count($this->data);
-	}
-	
+
+    var $data = array();
+    var $index = 0;
+    
+    function set_data($data) {
+        $this->data = $data;
+        $this->index = count($this->data);
+    }
+    
     function pfx($tokens, $vars = array()) {
-        
+
         if ($tokens == false) return false;
     
         $stack = new EvalMathStack;
-        
+
         foreach ($tokens as $token) { // nice and easy
 
             // if the token is a function, pop arguments off the stack, hand them to the function, and push the result back on
@@ -78,26 +79,26 @@
             } elseif (in_array($token, array('+', '-', '*', '/', '^'), true)) {
                 if (is_null($op2 = $stack->pop())) return $this->trigger("internal error");
                 if (is_null($op1 = $stack->pop())) return $this->trigger("internal error");
-                
-				switch ($token) {
-					
-                    case '+':        
-						$this->index += 1;
-						$stack->push($this->index); 
-						$this->data[$this->index] = array_merge($this->data[$op1],$this->data[$op2]);
-						break;
+        
+                switch ($token) {
+            
+                    case '+':
+                        $this->index += 1;
+                        $stack->push($this->index); 
+                        $this->data[$this->index] = array_merge($this->data[$op1],$this->data[$op2]);
+                        break;
                     case '-':
                         $this->index += 1;
-						$stack->push($this->index); 
-						$this->data[$this->index] = array_diff($this->data[$op1],$this->data[$op2]);
-						break;
+                        $stack->push($this->index); 
+                        $this->data[$this->index] = array_diff($this->data[$op1],$this->data[$op2]);
+                        break;
                     case '*':
                         $this->index += 1;
-						$stack->push($this->index); 
-						$this->data[$this->index] = array_intersect($this->data[$op1],$this->data[$op2]);
-						break;                    
+                        $stack->push($this->index); 
+                        $this->data[$this->index] = array_intersect($this->data[$op1],$this->data[$op2]);
+                        break;            
                 }
-				
+        
             // if the token is a unary operator, pop one value off the stack, do the operation, and push it back on
             } elseif ($token == "_") {
                 $stack->push(-1*$stack->pop());
@@ -117,12 +118,12 @@
         // when we're out of tokens, the stack should have a single element, the final result
         if ($stack->count != 1) return $this->trigger("internal error");
         $last = $stack->pop();
-		if(isset($this->data[$last]))
-			return $this->data[$last];
-		else
-			return false;
+        if (isset($this->data[$last]))
+            return $this->data[$last];
+        else
+            return false;
     }
-		
+
  }
 
 ?>

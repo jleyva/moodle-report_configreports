@@ -16,74 +16,75 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating Configurable Reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating Configurable Reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
   
-  function cr_print_js_function(){
-	?>
-		<script type="text/javascript">
-			function printDiv(id){
-				var cdiv, tmpw;
-			 
-				cdiv = document.getElementById(id);				   
-				tmpw = window.open(" ","Print");
-			   
-				tmpw.document.open();
-				tmpw.document.write('<html><body>');
-				tmpw.document.write(cdiv.innerHTML);
-				tmpw.document.write('</body></html>');
-				tmpw.document.close();
-				tmpw.print();
-				tmpw.close();
-			}
-		</script>
-	<?php
+  function cr_print_js_function() {
+    ?>
+        <script type="text/javascript">
+            function printDiv(id) {
+                var cdiv, tmpw;
+     
+                cdiv = document.getElementById(id);           
+                tmpw = window.open(" ","Print");
+       
+                tmpw.document.open();
+                tmpw.document.write('<html><body>');
+                tmpw.document.write(cdiv.innerHTML);
+                tmpw.document.write('</body></html>');
+                tmpw.document.close();
+                tmpw.print();
+                tmpw.close();
+            }
+        </script>
+    <?php
   }
   
-  function cr_add_jsordering($cssid){
-	global $DB, $CFG, $OUTPUT;
-    echo html_writer::script(false, new moodle_url('/blocks/configurable_reports/js/jquery-latest.js'));
-    echo html_writer::script(false, new moodle_url('/blocks/configurable_reports/js/jquery.tablesorter.min.js'));
+  function cr_add_jsordering($cssid) {
+    global $DB, $CFG, $OUTPUT;
+    echo html_writer::script(false, new moodle_url('/report/configreports/js/jquery-latest.js'));
+    echo html_writer::script(false, new moodle_url('/report/configreports/js/jquery.tablesorter.min.js'));
     $script = '$(document).ready(function() {
         // call the tablesorter plugin
         $("'.$cssid.'").tablesorter();
     });';
     echo html_writer::script($script);
-	?>
+    ?>
 
-		<style type="text/css">
-		<?php echo $cssid; ?> th.header{
-			background-image:url(<?php echo $OUTPUT->pix_url('normal', 'block_configurable_reports'); ?>);
-			background-position:right center;
-			background-repeat:no-repeat;
-			cursor:pointer;
-		}
+        <style type="text/css">
+        <?php echo $cssid; ?> th.header{
+            background-image:url(<?php echo $OUTPUT->pix_url('normal', 'report_configreports'); ?>);
+            background-position:right center;
+            background-repeat:no-repeat;
+            cursor:pointer;
+        }
 
-		<?php echo $cssid; ?> th.headerSortUp{
-		 background-image:url(<?php echo $OUTPUT->pix_url('asc', 'block_configurable_reports');?>);
-		}
+        <?php echo $cssid; ?> th.headerSortUp{
+         background-image:url(<?php echo $OUTPUT->pix_url('asc', 'report_configreports');?>);
+        }
 
-		<?php echo $cssid; ?> th.headerSortDown{
-		 background-image:url(<?php echo $OUTPUT->pix_url('desc', 'block_configurable_reports');?>);
-		}    
-		</style>		
-	<?php 
+        <?php echo $cssid; ?> th.headerSortDown{
+         background-image:url(<?php echo $OUTPUT->pix_url('desc', 'report_configreports');?>);
+        }    
+        </style>
+    <?php 
   }
 
   function urlencode_recursive($var) {
     if (is_object($var)) {
         $new_var = new object();
         $properties = get_object_vars($var);
-        foreach($properties as $property => $value) {
+        foreach ($properties as $property => $value) {
             $new_var->$property = urlencode_recursive($value);
         }
 
     } else if (is_array($var)) {
         $new_var = array();
-        foreach($var as $property => $value) {
+        foreach ($var as $property => $value) {
             $new_var[$property] = urlencode_recursive($value);
         }
 
@@ -101,17 +102,17 @@
     if (is_object($var)) {
         $new_var = new object();
         $properties = get_object_vars($var);
-        foreach($properties as $property => $value) {
+        foreach ($properties as $property => $value) {
             $new_var->$property = urldecode_recursive($value);
         }
 
-    } else if(is_array($var)) {
+    } else if (is_array($var)) {
         $new_var = array();
-        foreach($var as $property => $value) {
+        foreach ($var as $property => $value) {
             $new_var[$property] = urldecode_recursive($value);
         }
 
-    } else if(is_string($var)) {
+    } else if (is_string($var)) {
         $new_var = urldecode($var);
 
     } else {
@@ -121,75 +122,75 @@
     return $new_var;
 }
 
-function cr_get_my_reports($courseid, $userid, $allcourses=true){
-	global $DB;
+function cr_get_my_reports($courseid, $userid, $allcourses=true) {
+    global $DB;
 
-	$reports = array();
-	if ($courseid == SITEID){
-		$context = get_context_instance(CONTEXT_SYSTEM);
-	}	
-	else{
-		$context = get_context_instance(CONTEXT_COURSE, $courseid);
-	}
+    $reports = array();
+    if ($courseid == SITEID) {
+        $context = get_context_instance(CONTEXT_SYSTEM);
+    }    
+    else{
+        $context = get_context_instance(CONTEXT_COURSE, $courseid);
+    }
 
-	if(has_capability('block/configurable_reports:managereports', $context, $userid)){
-		if($courseid == SITEID && $allcourses)
-			$reports = $DB->get_records('block_configurable_reports_report',null,'name ASC');
-		else
-			$reports = $DB->get_records('block_configurable_reports_report',array('courseid' => $courseid),'name ASC');
-	}
-	else{		
-		$reports = $DB->get_records_select('block_configurable_reports_report','ownerid = ? AND courseid = ? ORDER BY name ASC',array($userid,$courseid));		
-	}
-	return $reports;
+    if (has_capability('report/configreports:managereports', $context, $userid)) {
+        if ($courseid == SITEID && $allcourses)
+            $reports = $DB->get_records('report_configreports',null,'name ASC');
+        else
+            $reports = $DB->get_records('report_configreports',array('courseid' => $courseid),'name ASC');
+    }
+    else{
+        $reports = $DB->get_records_select('report_configreports','ownerid = ? AND courseid = ? ORDER BY name ASC',array($userid,$courseid));
+    }
+    return $reports;
 }
   
- function cr_serialize($var){
-	return serialize(urlencode_recursive($var));
+ function cr_serialize($var) {
+    return serialize(urlencode_recursive($var));
  }
 
- function cr_unserialize($var){
-	return urldecode_recursive(unserialize($var));
+ function cr_unserialize($var) {
+    return urldecode_recursive(unserialize($var));
  } 
   
- function cr_check_report_permissions($report,$userid,$context){
-	global $DB, $CFG;
-	
-	require_once($CFG->dirroot.'/blocks/configurable_reports/report.class.php');
-	require_once($CFG->dirroot.'/blocks/configurable_reports/reports/'.$report->type.'/report.class.php');
-	
-	$classn = 'report_'.$report->type;
-	$classi = new $classn($report->id);
-	return $classi->check_permissions($userid,$context);
-	
-	return true;
+ function cr_check_report_permissions($report,$userid,$context) {
+    global $DB, $CFG;
+    
+    require_once($CFG->dirroot.'/report/configreports/report.class.php');
+    require_once($CFG->dirroot.'/report/configreports/reports/'.$report->type.'/report.class.php');
+    
+    $classn = 'report_'.$report->type;
+    $classi = new $classn($report->id);
+    return $classi->check_permissions($userid,$context);
+    
+    return true;
  }
  
- function cr_get_report_plugins($courseid){
+ function cr_get_report_plugins($courseid) {
  
-	$pluginoptions = array();
-	$context = ($courseid == SITEID)? get_context_instance(CONTEXT_SYSTEM): get_context_instance(CONTEXT_COURSE,$courseid);
-	$plugins = get_list_of_plugins('blocks/configurable_reports/reports');
-	
-	if($plugins)
-		foreach($plugins as $p){
-			if($p == 'sql' && !has_capability('block/configurable_reports:managesqlreports',$context))
-				continue;
-			$pluginoptions[$p] = get_string('report_'.$p,'block_configurable_reports');
-		}
-	return $pluginoptions;
+    $pluginoptions = array();
+    $context = ($courseid == SITEID)? get_context_instance(CONTEXT_SYSTEM): get_context_instance(CONTEXT_COURSE,$courseid);
+    $plugins = get_list_of_plugins('report/configreports/reports');
+    
+    if ($plugins)
+        foreach ($plugins as $p) {
+            if ($p == 'sql' && !has_capability('report/configreports:managesqlreports',$context))
+                continue;
+            $pluginoptions[$p] = get_string('report_'.$p,'report_configreports');
+        }
+    return $pluginoptions;
  }
 
- function cr_get_export_plugins(){
+ function cr_get_export_plugins() {
  
-	$exportoptions = array();
-	$plugins = get_list_of_plugins('blocks/configurable_reports/export');
-	
-	if($plugins)
-		foreach($plugins as $p){
-			$pluginoptions[$p] = get_string('export_'.$p,'block_configurable_reports');
-		}
-	return $pluginoptions;
+    $exportoptions = array();
+    $plugins = get_list_of_plugins('report/configreports/export');
+    
+    if ($plugins)
+        foreach ($plugins as $p) {
+            $pluginoptions[$p] = get_string('export_'.$p,'report_configreports');
+        }
+    return $pluginoptions;
  } 
  
  function cr_print_table($table, $return=false) {
@@ -324,9 +325,9 @@ function cr_get_my_reports($courseid, $userid, $allcourses=true){
 
     echo $output;
     return true;
-}            
+}    
 
-function table_to_excel($filename,$table){
+function table_to_excel($filename,$table) {
     global $DB, $CFG;
     
     require_once($CFG->dirroot.'/lib/excellib.class.php');
@@ -357,8 +358,8 @@ function table_to_excel($filename,$table){
     /// Adding the worksheet
     $myxls =& $workbook->add_worksheet($filename);     
     
-    foreach($matrix as $ri=>$col){
-        foreach($col as $ci=>$cv){
+    foreach ($matrix as $ri=>$col) {
+        foreach ($col as $ci=>$cv) {
             $myxls->write_string($ri,$ci,$cv);
         }
     }

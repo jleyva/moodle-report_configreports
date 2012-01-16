@@ -16,42 +16,43 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 class report_users extends report_base{
-	
-	function init(){
-		$this->components = array('columns','conditions','ordering','filters','template','permissions','calcs','plot');
-	}	
+    
+    function init() {
+        $this->components = array('columns','conditions','ordering','filters','template','permissions','calcs','plot');
+    }    
 
-	function get_all_elements(){
-		global $DB;
-		
-		$elements = array();
-		$rs = $DB->get_recordset('user', null, '', 'id');
+    function get_all_elements() {
+        global $DB;
+
+        $elements = array();
+        $rs = $DB->get_recordset('user', null, '', 'id');
         foreach ($rs as $result) {
-			$elements[] = $result->id;
-		}
-		$rs->close();
-		return $elements;
-	}
-	
-	function get_rows($elements, $sqlorder = ''){
-		global $DB, $CFG;
-	
-		if(!empty($elements)){
-			list($usql, $params) = $DB->get_in_or_equal($elements);	
-			return $DB->get_records_select('user',"id $usql", $params, $sqlorder);
-		}	
-		else{
-			return array();
-		}
-	}
-	
+            $elements[] = $result->id;
+        }
+        $rs->close();
+        return $elements;
+    }
+    
+    function get_rows($elements, $sqlorder = '') {
+        global $DB, $CFG;
+    
+        if (!empty($elements)) {
+            list($usql, $params) = $DB->get_in_or_equal($elements);    
+            return $DB->get_records_select('user',"id $usql", $params, $sqlorder);
+        }    
+        else{
+            return array();
+        }
+    }
+    
 }
 
 ?>

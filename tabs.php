@@ -16,11 +16,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');    ///  It must be included from a Moodle page
@@ -28,16 +29,16 @@ if (!defined('MOODLE_INTERNAL')) {
 
 $top = array();
 
-$top[] = new tabobject('report', new moodle_url('/blocks/configurable_reports/editreport.php', array('id' => $report->id)),
-                get_string('report','block_configurable_reports'));
+$top[] = new tabobject('report', new moodle_url('/report/configreports/editreport.php', array('id' => $report->id)),
+                get_string('report','report_configreports'));
 
-foreach($reportclass->components as $comptab){
-	$top[] = new tabobject($comptab, new moodle_url('/blocks/configurable_reports/editcomp.php', array('id' => $report->id, 'comp' => $comptab)),
-                get_string($comptab,'block_configurable_reports'));
+foreach ($reportclass->components as $comptab) {
+    $top[] = new tabobject($comptab, new moodle_url('/report/configreports/editcomp.php', array('id' => $report->id, 'comp' => $comptab)),
+                get_string($comptab,'report_configreports'));
 }
 
-$top[] = new tabobject('viewreport', new moodle_url('/blocks/configurable_reports/viewreport.php', array('id' => $report->id)),
-                get_string('viewreport','block_configurable_reports'));
+$top[] = new tabobject('viewreport', new moodle_url('/report/configreports/viewreport.php', array('id' => $report->id)),
+                get_string('viewreport','report_configreports'));
 
 $tabs = array($top);
 

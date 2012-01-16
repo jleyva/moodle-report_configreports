@@ -16,43 +16,44 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** Configurable Reports
-  * A Moodle block for creating customizable reports
-  * @package blocks
-  * @author: Juan leyva <http://www.twitter.com/jleyvadelgado>
-  * @date: 2009
-  */
+ * A report plugin for creating customizable reports
+ * @package report
+ * @subpackage configreports
+ * @copyright Juan leyva <http://www.twitter.com/jleyvadelgado>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 class report_courses extends report_base{
-	
-	function init(){
-		$this->components = array('columns','conditions','ordering','filters','template','permissions','calcs','plot');
-	}	
+    
+    function init() {
+        $this->components = array('columns','conditions','ordering','filters','template','permissions','calcs','plot');
+    }    
 
-	function get_all_elements(){
-		global $DB;
-		
-		$elements = array();
-		$rs = $DB->get_recordset('course', null, '', 'id');
+    function get_all_elements() {
+        global $DB;
+
+        $elements = array();
+        $rs = $DB->get_recordset('course', null, '', 'id');
         foreach ($rs as $result) {
-			$elements[] = $result->id;
-		}
-		$rs->close();
-		return $elements;
-	}
-	
-	function get_rows($elements, $sqlorder = ''){
-		global $DB, $CFG;
-		
-		$finalelements = array();
-		
-		if(!empty($elements)){
-			list($usql, $params) = $DB->get_in_or_equal($elements);
-			return $DB->get_records_select('course',"id $usql", $params, $sqlorder);
-		}	
-		
-		return $finalelements;
-	}
-	
+            $elements[] = $result->id;
+        }
+        $rs->close();
+        return $elements;
+    }
+    
+    function get_rows($elements, $sqlorder = '') {
+        global $DB, $CFG;
+
+        $finalelements = array();
+
+        if (!empty($elements)) {
+            list($usql, $params) = $DB->get_in_or_equal($elements);
+            return $DB->get_records_select('course',"id $usql", $params, $sqlorder);
+        }    
+
+        return $finalelements;
+    }
+    
 }
 
 ?>
